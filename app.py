@@ -1,5 +1,3 @@
-# app.py
-
 import streamlit as st
 from main import get_chapters_for_grade_subject, create_prompt
 from openai_api import generate_content
@@ -7,23 +5,23 @@ from openai_api import generate_content
 # Set Streamlit page configuration
 st.set_page_config(page_title="PEDAssistant: Empowering Education Excellence", layout="wide")
 
-# Custom CSS for theme styling
+# Custom CSS for theme styling with responsiveness
 st.markdown("""
     <style>
-    /* Background Color */
+    /* General background color */
     .stApp {
         background-color: white;
     }
 
     /* Header Styling */
     h1, h2, h3, h4, h5, h6 {
-        color: #8C001A;  /* Use Pedagogy's red color */
+        color: #8C001A;
         font-family: 'Arial', sans-serif;
     }
 
     /* Sidebar styling */
     [data-testid="stSidebar"] {
-        background-color: #F4B400;  /* Use Pedagogy's yellow color */
+        background-color: #F4B400;
     }
 
     /* Button styling */
@@ -35,6 +33,7 @@ st.markdown("""
         border-radius: 5px;
         cursor: pointer;
         font-size: 14px;
+        width: 100%;  /* Ensure the button takes the full width */
     }
     div.stButton > button:hover {
         background-color: #AA1E2D;
@@ -46,16 +45,63 @@ st.markdown("""
         font-weight: bold;
         color: #8C001A;
     }
-    
+
     /* Footer styling */
     hr {
         border: 1px solid #8C001A;
     }
-    
+
     .footer {
         color: #8C001A;
         font-size: 14px;
         text-align: center;
+    }
+
+    /* Make the layout responsive */
+    @media only screen and (max-width: 600px) {
+        /* Adjust font sizes for mobile */
+        h1 {
+            font-size: 24px !important;
+        }
+        h2 {
+            font-size: 20px !important;
+        }
+        h3 {
+            font-size: 18px !important;
+        }
+        
+        /* Adjust button styling for mobile */
+        div.stButton > button {
+            padding: 8px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        
+        /* Adjust radio button styling for mobile */
+        .stRadio > label {
+            font-size: 14px;
+        }
+
+        /* Make all content fit within the screen */
+        .css-18e3th9 {
+            padding: 1rem 1rem 2rem 1rem !important;  /* Adjust padding */
+        }
+
+        /* Adjust sidebar content */
+        [data-testid="stSidebar"] {
+            padding: 1rem;
+        }
+
+        /* Adjust footer text */
+        .footer {
+            font-size: 12px;
+        }
+
+        /* Ensure all components are centered */
+        .block-container {
+            padding-left: 0rem;
+            padding-right: 0rem;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
