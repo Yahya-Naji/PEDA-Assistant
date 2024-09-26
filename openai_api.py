@@ -1,19 +1,15 @@
 # openai_api.py
 
 import openai
-from dotenv import load_dotenv
-import os
+import streamlit as st  # Import Streamlit to use secrets
 
-# Load environment variables
-load_dotenv()
-
-# Set up your OpenAI API key using the latest OpenAI SDK method
-client = openai.Client(api_key=os.getenv("OPENAI_API_KEY"))
+# Set up OpenAI API key using Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Function to make API calls using the new method
 def generate_content(prompt):
-    response = client.completions.create(
-        model="gpt-3.5-turbo-instruct",  # Specify your desired model
+    response = openai.Completion.create(
+        model="text-davinci-003",  # Specify your desired model
         prompt=prompt,
         max_tokens=2000
     )
