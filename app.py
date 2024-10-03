@@ -7,23 +7,25 @@ from openai_api import generate_content
 # Set Streamlit page configuration
 st.set_page_config(page_title="PEDAssistant: Empowering Education Excellence", layout="wide")
 
-# Custom CSS for theme styling
+# Custom CSS for theme styling with improved mobile responsiveness
 st.markdown("""
     <style>
-    /* Background Color */
+    /* General background color */
     .stApp {
         background-color: white;
     }
 
     /* Header Styling */
     h1, h2, h3, h4, h5, h6 {
-        color: #8C001A;  /* Use Pedagogy's red color */
+        color: #8C001A;
         font-family: 'Arial', sans-serif;
+        margin: 0;  /* Remove default margins */
+        padding: 8px 0;  /* Add consistent padding */
     }
 
     /* Sidebar styling */
     [data-testid="stSidebar"] {
-        background-color: #F4B400;  /* Use Pedagogy's yellow color */
+        background-color: #F4B400;
     }
 
     /* Button styling */
@@ -31,10 +33,12 @@ st.markdown("""
         background-color: #8C001A;
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
+        padding: 12px 16px;  /* Adjust padding */
+        border-radius: 8px;   /* Rounded corners */
         cursor: pointer;
-        font-size: 14px;
+        font-size: 16px;      /* Increase font size */
+        width: 100%;          /* Full-width button */
+        margin: 10px 0;       /* Add margin for spacing */
     }
     div.stButton > button:hover {
         background-color: #AA1E2D;
@@ -46,19 +50,89 @@ st.markdown("""
         font-weight: bold;
         color: #8C001A;
     }
-    
+
     /* Footer styling */
     hr {
         border: 1px solid #8C001A;
     }
-    
+
     .footer {
         color: #8C001A;
         font-size: 14px;
         text-align: center;
+        margin-bottom: 20px;  /* Add space at the bottom */
+    }
+
+    /* Mobile-specific styles */
+    @media only screen and (max-width: 600px) {
+        /* Adjust font sizes for mobile */
+        h1 {
+            font-size: 22px !important;
+        }
+        h2 {
+            font-size: 20px !important;
+        }
+        h3 {
+            font-size: 18px !important;
+        }
+        
+        /* Button styling for mobile */
+        div.stButton > button {
+            padding: 10px 12px;  /* Slightly reduce padding */
+            font-size: 14px;      /* Slightly reduce font size */
+            border-radius: 6px;   /* Adjust button corner radius */
+        }
+
+        /* Adjust radio button styling for mobile */
+        .stRadio > label {
+            font-size: 14px;
+        }
+
+        /* Adjust padding and margins */
+        .css-18e3th9 {
+            padding: 1rem 0.5rem 2rem 0.5rem !important;  /* Add left/right padding */
+        }
+
+        /* Center the main content container */
+        .block-container {
+            margin: auto;
+            padding: 0 1rem;
+        }
+
+        /* Adjust sidebar content */
+        [data-testid="stSidebar"] {
+            padding: 1rem;
+        }
+
+        /* Adjust footer text */
+        .footer {
+            font-size: 12px;
+        }
+
+        /* Ensure all elements are responsive */
+        .stRadio {
+            margin-bottom: 1rem;
+        }
+
+        /* Adjust interactive chat styling */
+        .stTextInput > div > input {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+
+    /* Larger screens adjustments for better alignment */
+    @media only screen and (min-width: 600px) {
+        .block-container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
+
+
+
 
 # App title
 st.title("PEDAssistant: Empowering Education Excellence")
