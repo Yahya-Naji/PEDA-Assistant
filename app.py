@@ -1,6 +1,7 @@
-# app.py
-
 import streamlit as st
+from gtts import gTTS
+import os
+from io import BytesIO
 from main import get_chapters_for_grade_subject, create_prompt
 from openai_api import generate_content
 
@@ -19,8 +20,8 @@ st.markdown("""
     h1, h2, h3, h4, h5, h6 {
         color: #8C001A;
         font-family: 'Arial', sans-serif;
-        margin: 0;  /* Remove default margins */
-        padding: 8px 0;  /* Add consistent padding */
+        margin: 0;
+        padding: 8px 0;
     }
 
     /* Sidebar styling */
@@ -33,12 +34,12 @@ st.markdown("""
         background-color: #8C001A;
         color: white;
         border: none;
-        padding: 12px 16px;  /* Adjust padding */
-        border-radius: 8px;   /* Rounded corners */
+        padding: 12px 16px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 16px;      /* Increase font size */
-        width: 100%;          /* Full-width button */
-        margin: 10px 0;       /* Add margin for spacing */
+        font-size: 16px;
+        width: 100%;
+        margin: 10px 0;
     }
     div.stButton > button:hover {
         background-color: #AA1E2D;
@@ -60,79 +61,42 @@ st.markdown("""
         color: #8C001A;
         font-size: 14px;
         text-align: center;
-        margin-bottom: 20px;  /* Add space at the bottom */
+        margin-bottom: 20px;
     }
 
     /* Mobile-specific styles */
     @media only screen and (max-width: 600px) {
-        /* Adjust font sizes for mobile */
-        h1 {
-            font-size: 22px !important;
-        }
-        h2 {
-            font-size: 20px !important;
-        }
-        h3 {
-            font-size: 18px !important;
-        }
-        
-        /* Button styling for mobile */
+        h1 { font-size: 22px !important; }
+        h2 { font-size: 20px !important; }
+        h3 { font-size: 18px !important; }
         div.stButton > button {
-            padding: 10px 12px;  /* Slightly reduce padding */
-            font-size: 14px;      /* Slightly reduce font size */
-            border-radius: 6px;   /* Adjust button corner radius */
-        }
-
-        /* Adjust radio button styling for mobile */
-        .stRadio > label {
+            padding: 10px 12px;
             font-size: 14px;
+            border-radius: 6px;
         }
-
-        /* Adjust padding and margins */
+        .stRadio > label { font-size: 14px; }
         .css-18e3th9 {
-            padding: 1rem 0.5rem 2rem 0.5rem !important;  /* Add left/right padding */
+            padding: 1rem 0.5rem 2rem 0.5rem !important;
         }
-
-        /* Center the main content container */
-        .block-container {
-            margin: auto;
-            padding: 0 1rem;
-        }
-
-        /* Adjust sidebar content */
-        [data-testid="stSidebar"] {
-            padding: 1rem;
-        }
-
-        /* Adjust footer text */
-        .footer {
-            font-size: 12px;
-        }
-
-        /* Ensure all elements are responsive */
-        .stRadio {
-            margin-bottom: 1rem;
-        }
-
-        /* Adjust interactive chat styling */
-        .stTextInput > div > input {
-            padding: 10px;
-            font-size: 14px;
-        }
+        .block-container { margin: auto; padding: 0 1rem; }
+        [data-testid="stSidebar"] { padding: 1rem; }
+        .footer { font-size: 12px; }
+        .stRadio { margin-bottom: 1rem; }
+        .stTextInput > div > input { padding: 10px; font-size: 14px; }
     }
-
-    /* Larger screens adjustments for better alignment */
     @media only screen and (min-width: 600px) {
-        .block-container {
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
+        .block-container { padding-left: 2rem; padding-right: 2rem; }
     }
     </style>
 """, unsafe_allow_html=True)
 
-
-
+# Function to convert text to speech and return the audio file
+def text_to_speech(text):
+    tts = gTTS(text)
+    audio_file = BytesIO()
+    tts.write_to_fp(audio_file)
+    audio_file.seek(0)
+    return audio_file
 
 # App title
 st.title("PEDAssistant: Empowering Education Excellence")
@@ -183,6 +147,9 @@ if st.button(f"Generate {request_type.title()} for {selected_chapter}"):
     if not any(msg["content"] == response for msg in st.session_state.messages):
         st.session_state.messages.append({"role": "assistant", "content": response})
     
+    # Convert response to audio
+    audio_file = text_to_speech(response)
+    
     # Activate the chat interface
     st.session_state.show_chat = True
 
@@ -196,6 +163,7 @@ if st.session_state.show_chat:
             st.markdown(f"**You:** {message['content']}")
         else:
             st.markdown(f"**AI (Teacher):** {message['content']}")
+            st.audio(audio_file)
 
     # Input area for additional user prompts
     user_input = st.text_input("Enter your request or refinement here:")
@@ -212,6 +180,10 @@ if st.session_state.show_chat:
         if not any(msg["content"] == refined_response for msg in st.session_state.messages):
             st.session_state.messages.append({"role": "assistant", "content": refined_response})
             st.markdown(f"**AI (Teacher):** {refined_response}")
+            
+            # Convert refined response to audio
+            refined_audio_file = text_to_speech(refined_response)
+            st.audio(refined_audio_file)
 
     # Button to clear chat history
     if st.button("Clear Chat"):
