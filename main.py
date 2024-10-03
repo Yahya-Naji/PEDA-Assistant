@@ -17,7 +17,7 @@ def create_prompt(selected_grade, selected_subject, selected_chapter, request_ty
         return base_prompt + "Include objectives, lesson breakdowns, and estimated times, aligned with Common Core State Standards."
     elif request_type == "video script":
         return base_prompt + (
-            "You are the teacher. Provide a detailed video script for teaching the topic. only include the detials teacher will say"
+            "Generate a script for a teacher giving a lesson on [topic]. Focus only on what the teacher will say. Make it engaging and motivational, with a tone similar to an international figure who is charismatic and confident"
            
         )
     elif request_type == "practice questions":
